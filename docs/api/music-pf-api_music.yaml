@@ -8,11 +8,11 @@ info:
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "petstore.swagger.io"
+host: "host.domain.com"
 basePath: "/v1"
 tags:
 - name: "dev"
-  description: 開発用API
+  description: "開発用API"
 - name: "music"
   description: "楽曲情報についてのAPI"
 - name: "instrumentation"
