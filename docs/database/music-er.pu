@@ -1,0 +1,131 @@
+@startuml
+
+' hide the spot
+hide circle
+
+' 楽曲テーブル
+entity "musics" as music {
+    * id : UUID <<generated>>
+    --
+    composer_id : UUID <<FK>>
+    arranger_id : UUID <<FK>>
+    * composed_year : number
+    arranged_year : number
+    * title_ja_jp : text
+    title_en_us : text
+    opus : text
+    version : text
+    * category_id : text <<FK>>
+    * instrumentation_id : UUID <<FK>>
+    * created_at : text <<generated>>
+    updated_at : text <<generated>>
+}
+
+' 楽曲分類テーブル
+entity "music_categories" as music_category {
+    * id : text
+    --
+    * ja_jp : text
+    * created_at : text <<generated>>
+    updated_at : text <<generated>>
+}
+
+' 作者(作曲者や編曲者)テーブル
+entity "creators" as creator {
+    * id : UUID <<generated>>
+    --
+    * name_ja_jp : text
+    * name_en_us : text
+    birth_year : number
+    birth_month : number
+    birth_date : number
+    death_year : number
+    death_month : number
+    death_date : number
+    country_id : List<text> <<FK>>
+    * created_at : text <<generated>>
+    updated_at : text <<generated>>
+}
+
+' 国テーブル
+entity "countries" as country {
+    * id : text
+    --
+    * ja_jp : text
+    * created_at : text <<generated>>
+    updated_at : text <<generated>>
+}
+
+' 編成テーブル
+entity "instrumentations" as instrumentation {
+    * id : UUID <<generated>>
+    --
+    * category_id : text <<FK>>
+    * instruments : List<text> ({instrument_id}-{part} のリスト)
+    instrument_changes : text
+    woodwind_remarks_ja_jp : text
+    brass_remarks_ja_jp : text
+    percussion_remarks_ja_jp : text
+    string_remarks_ja_jp : text
+    voice_remarks_ja_jp : text
+    other_remarks_ja_jp : text
+    * created_at : text <<generated>>
+    updated_at : text <<generated>>
+}
+
+' 編成分類テーブル
+entity "instrumentation_categories" as instrumentation_category {
+    * id : text
+    --
+    * ja_jp : text
+    * created_at : text <<generated>>
+    updated_at : text <<generated>>
+}
+
+' 楽器テーブル
+entity "instruments" as instrument {
+    * id : text
+    --
+    * ja_jp : text
+    en_us : text
+    it_it : text
+    * abbreviation : text
+    * category : text <<FK>>
+    * is_usual : bool
+    * created_at : text <<generated>>
+    updated_at : text <<generated>>
+}
+
+' 楽器分類テーブル
+entity "instrument_categories" as instrument_category {
+    * id : text
+    --
+    * ja_jp : text
+    * created_at : text <<generated>>
+    updated_at : text <<generated>>
+}
+
+' 楽器持替えテーブル
+entity "instrument_changes" as instrument_change {
+    * id : text ({instrumentation_id}-{instrument_id}-{part}) <<generated>>
+    --
+    * main_instrument : text ({instrument_id}-{part})
+    * sub_instruments : List<text> ({instrument_id}-{part} のリスト)
+    * created_at : text <<generated>>
+    updated_at : text <<generated>>
+}
+
+music ||--|| music_category : 楽曲の分類
+music ||--o| creator : 作曲者
+music ||--o| creator : 編曲者
+music }|--|| instrumentation : 同一編成であれば、1つの編成は複数の楽曲に紐づく
+
+creator ||--o{ country : 国
+
+instrumentation ||--|| instrumentation_category : 編成の分類
+instrumentation ||--|{ instrument : 楽器
+instrumentation ||--o{ instrument_change : 持ち替え情報
+
+instrument ||--|| instrument_category : 楽器の分類
+
+@enduml
