@@ -23,102 +23,102 @@ schemes:
 - "https"
 - "http"
 paths:
-  # /dev/tables/summary:
-  #   get:
-  #     tags:
-  #     - "dev"
-  #     summary: "【開発用】主要なデータをすべて取得する"
-  #     description: |
-  #       主要なデータをすべて取得する。
-  #       データ閲覧用。
-  #       将来このAPIは隠蔽する。
-  #     parameters:
-  #     - name: "target"
-  #       in: "query"
-  #       description: "取得対象のテーブル名"
-  #       required: true
-  #       type: "string"
-  #       enum:
-  #       - "music"
-  #     responses:
-  #       "200":
-  #         description: "成功"
-  #         schema:
-  #           $ref: "#/definitions/music_summary"
-  #       "400":
-  #         description: "不正な入力"
-  #         schema:
-  #           $ref: "#/definitions/errorResponse"
-  # /music:
-  #   post:
-  #     tags:
-  #     - "music"
-  #     summary: "【未定義】楽曲情報を登録する"
-  #     responses:
-  #       "400":
-  #         description: "不正な入力"
-  # /music/search:
-  #   post:
-  #     tags:
-  #     - "music"
-  #     summary: "【未定義】楽曲を検索する"
-  #     responses:
-  #       "400":
-  #         description: "不正な入力"
+  /dev/tables/summary:
+    get:
+      tags:
+      - "dev"
+      summary: "【開発用】主要なデータをすべて取得する"
+      description: |
+        主要なデータをすべて取得する。
+        データ閲覧用。
+        将来このAPIは隠蔽する。
+      parameters:
+      - name: "target"
+        in: "query"
+        description: "取得対象のテーブル名"
+        required: true
+        type: "string"
+        enum:
+        - "music"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/musicSummary"
+        "400":
+          description: "不正な入力"
+          schema:
+            $ref: "#/definitions/errorResponse"
+  /music:
+    post:
+      tags:
+      - "music"
+      summary: "【未定義】楽曲情報を登録する"
+      responses:
+        "400":
+          description: "不正な入力"
+  /music/search:
+    post:
+      tags:
+      - "music"
+      summary: "【未定義】楽曲を検索する"
+      responses:
+        "400":
+          description: "不正な入力"
 
-  # /music/instrumentation:
-  #   post:
-  #     tags:
-  #     - "instrumentation"
-  #     summary: "【未定義】楽器編成を新規登録する"
-  #     responses:
-  #       "400":
-  #         description: "不正な入力"
-  # /music/instrumentation/search:
-  #   post:
-  #     tags:
-  #     - "instrumentation"
-  #     summary: "【未定義】楽器編成を検索する"
-  #     responses:
-  #       "400":
-  #         description: "不正な入力"
-  # /music/instrumentation/{id}:
-  #   get:
-  #     tags:
-  #     - "instrumentation"
-  #     summary: "【未定義】{id}の楽器編成の詳細を取得する"
-  #     description: ""
-  #     operationId: "getInstrumentation"
-  #     produces:
-  #     - "application/json"
-  #     parameters:
-  #     - name: "id"
-  #       in: "path"
-  #       description: "楽器編成ID"
-  #       required: true
-  #       type: "string"
-  #       format: "string"
-  #     responses:
-  #       "400":
-  #         description: "不正な入力"
-  #   put:
-  #     tags:
-  #     - "instrumentation"
-  #     summary: "【未定義】{id}の楽器編成の詳細を更新する"
-  #     description: ""
-  #     operationId: "updateInstrumentation"
-  #     produces:
-  #     - "application/json"
-  #     parameters:
-  #     - name: "id"
-  #       in: "path"
-  #       description: "楽器編成ID"
-  #       required: true
-  #       type: "string"
-  #       format: "string"
-  #     responses:
-  #       "400":
-  #         description: "不正な入力"
+  /music/instrumentation:
+    post:
+      tags:
+      - "instrumentation"
+      summary: "【未定義】楽器編成を新規登録する"
+      responses:
+        "400":
+          description: "不正な入力"
+  /music/instrumentation/search:
+    post:
+      tags:
+      - "instrumentation"
+      summary: "【未定義】楽器編成を検索する"
+      responses:
+        "400":
+          description: "不正な入力"
+  /music/instrumentation/{id}:
+    get:
+      tags:
+      - "instrumentation"
+      summary: "【未定義】{id}の楽器編成の詳細を取得する"
+      description: ""
+      operationId: "getInstrumentation"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "楽器編成ID"
+        required: true
+        type: "string"
+        format: "string"
+      responses:
+        "400":
+          description: "不正な入力"
+    put:
+      tags:
+      - "instrumentation"
+      summary: "【未定義】{id}の楽器編成の詳細を更新する"
+      description: ""
+      operationId: "updateInstrumentation"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "楽器編成ID"
+        required: true
+        type: "string"
+        format: "string"
+      responses:
+        "400":
+          description: "不正な入力"
 
   /music/instrumentation/instrument:
     post:
@@ -227,61 +227,61 @@ paths:
             $ref: "#/definitions/errorResponse"
 
 definitions:
-  # music_summary:
-  #   type: "object"
-  #   description: "すべてのテーブル情報"
-  #   properties:
-  #     musics:
-  #       type: "array"
-  #       items:
-  #         $ref: "#/definitions/music"
-  #     music_categories:
-  #       type: "array"
-  #       items:
-  #         $ref: "#/definitions/musicCategory"
-  #     creators:
-  #       type: "array"
-  #       items:
-  #         $ref: "#/definitions/creator"
-  #     countries:
-  #       type: "array"
-  #       items:
-  #         $ref: "#/definitions/country"
-  #     instrumentations:
-  #       type: "array"
-  #       items:
-  #         $ref: "#/definitions/instrumentation"
-  #     instrumentation_categories:
-  #       type: "array"
-  #       items:
-  #         $ref: "#/definitions/instrumentationCategory"
-  #     instruments:
-  #       type: "array"
-  #       items:
-  #         $ref: "#/definitions/instrument"
-  #     instrument_categories:
-  #       type: "array"
-  #       items:
-  #         $ref: "#/definitions/instrumentCategory"
+  musicSummary:
+    type: "object"
+    description: "すべてのテーブル情報"
+    properties:
+      musics:
+        type: "array"
+        items:
+          $ref: "#/definitions/music"
+      music_categories:
+        type: "array"
+        items:
+          $ref: "#/definitions/musicCategory"
+      creators:
+        type: "array"
+        items:
+          $ref: "#/definitions/creator"
+      countries:
+        type: "array"
+        items:
+          $ref: "#/definitions/country"
+      instrumentations:
+        type: "array"
+        items:
+          $ref: "#/definitions/instrumentation"
+      instrumentation_categories:
+        type: "array"
+        items:
+          $ref: "#/definitions/instrumentationCategory"
+      instruments:
+        type: "array"
+        items:
+          $ref: "#/definitions/instrument"
+      instrument_categories:
+        type: "array"
+        items:
+          $ref: "#/definitions/instrumentCategory"
 
-  # music:
-  #   type: "object"
-  #   description: "楽曲情報"
-  # musicCategory:
-  #   type: "object"
-  #   description: "楽曲の分類"
-  # creator:
-  #   type: "object"
-  #   description: "作曲者・編成者情報"
-  # country:
-  #   type: "object"
-  #   description: "国情報"
-  # instrumentation:
-  #   type: "object"
-  #   description: "編成情報"
-  # instrumentationCategory:
-  #   type: "object"
-  #   description: "編成の分類"
+  music:
+    type: "object"
+    description: "楽曲情報"
+  musicCategory:
+    type: "object"
+    description: "楽曲の分類"
+  creator:
+    type: "object"
+    description: "作曲者・編成者情報"
+  country:
+    type: "object"
+    description: "国情報"
+  instrumentation:
+    type: "object"
+    description: "編成情報"
+  instrumentationCategory:
+    type: "object"
+    description: "編成の分類"
   instrument:
     type: "object"
     description: "楽器の情報"
@@ -425,29 +425,29 @@ definitions:
         default: true
         description: "よく使われる楽器かどうか。falseは特殊楽器を指す。"
         example: true
-  # instrumentCategory:
-  #   type: "object"
-  #   description: "楽器の分類"
-  #   required:
-  #   - "id"
-  #   - "ja_jp"
-  #   - "en_us"
-  #   properties:
-  #     id:
-  #       type: "string"
-  #       format: "string"
-  #       description: "ID"
-  #       example: "woodwind"
-  #     ja_jp:
-  #       type: "string"
-  #       format: "string"
-  #       description: "楽器分類の日本語名"
-  #       example: "木管楽器"
-  #     en_us:
-  #       type: "string"
-  #       format: "string"
-  #       description: "楽器分類の日本語名"
-  #       example: "woodwind"
+  instrumentCategory:
+    type: "object"
+    description: "楽器の分類"
+    required:
+    - "id"
+    - "ja_jp"
+    - "en_us"
+    properties:
+      id:
+        type: "string"
+        format: "string"
+        description: "ID"
+        example: "woodwind"
+      ja_jp:
+        type: "string"
+        format: "string"
+        description: "楽器分類の日本語名"
+        example: "木管楽器"
+      en_us:
+        type: "string"
+        format: "string"
+        description: "楽器分類の日本語名"
+        example: "woodwind"
 
   errorResponse:
     type: "object"
