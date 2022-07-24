@@ -35,7 +35,7 @@ paths:
       parameters:
       - name: "target"
         in: "query"
-        description: "取得対象のテーブル名"
+        description: "取得対象のデータ分類"
         required: true
         type: "string"
         enum:
@@ -44,11 +44,11 @@ paths:
         "200":
           description: "成功"
           schema:
-            $ref: "#/definitions/music_summary"
+            $ref: "#/definitions/musicSummary"
         "400":
           description: "不正な入力"
           schema:
-            $ref: "#/definitions/error_response"
+            $ref: "#/definitions/errorResponse"
   /music:
     post:
       tags:
@@ -140,14 +140,14 @@ paths:
           type: "object"
           properties:
             instrument:
-              $ref: "#/definitions/instrument_post"
+              $ref: "#/definitions/instrumentPost"
       responses:
         "200":
           description: "成功"
         "400":
           description: "不正な入力"
           schema:
-            $ref: "#/definitions/error_response"
+            $ref: "#/definitions/errorResponse"
     delete:
       tags:
       - "instrument"
@@ -163,7 +163,10 @@ paths:
             type: "object"
             properties:
               deleted_instruments:
-                $ref: "#/definitions/instrument_list"
+                type: "array"
+                description: "楽器情報の一覧"
+                items:
+                  $ref: "#/definitions/instrument"
   /music/instrumentation/instrument/{id}:
     get:
       tags:
@@ -185,7 +188,7 @@ paths:
         "400":
           description: "不正な入力"
           schema:
-            $ref: "#/definitions/error_response"
+            $ref: "#/definitions/errorResponse"
     put:
       tags:
       - "instrument"
@@ -210,7 +213,7 @@ paths:
           type: "object"
           properties:
             instrument:
-              $ref: "#/definitions/instrument_update"
+              $ref: "#/definitions/instrumentUpdate"
       responses:
         "200":
           description: "成功"
@@ -221,10 +224,10 @@ paths:
             * ボディのidがすでに存在する
             * ボディのcategory_idが存在しない
           schema:
-            $ref: "#/definitions/error_response"
+            $ref: "#/definitions/errorResponse"
 
 definitions:
-  music_summary:
+  musicSummary:
     type: "object"
     description: "すべてのテーブル情報"
     properties:
@@ -235,7 +238,7 @@ definitions:
       music_categories:
         type: "array"
         items:
-          $ref: "#/definitions/music_category"
+          $ref: "#/definitions/musicCategory"
       creators:
         type: "array"
         items:
@@ -251,7 +254,7 @@ definitions:
       instrumentation_categories:
         type: "array"
         items:
-          $ref: "#/definitions/instrumentation_category"
+          $ref: "#/definitions/instrumentationCategory"
       instruments:
         type: "array"
         items:
@@ -259,12 +262,12 @@ definitions:
       instrument_categories:
         type: "array"
         items:
-          $ref: "#/definitions/instrument_category"
+          $ref: "#/definitions/instrumentCategory"
 
   music:
     type: "object"
     description: "楽曲情報"
-  music_category:
+  musicCategory:
     type: "object"
     description: "楽曲の分類"
   creator:
@@ -276,7 +279,7 @@ definitions:
   instrumentation:
     type: "object"
     description: "編成情報"
-  instrumentation_category:
+  instrumentationCategory:
     type: "object"
     description: "編成の分類"
   instrument:
@@ -325,7 +328,7 @@ definitions:
         default: true
         description: "よく使われる楽器かどうか。falseは特殊楽器を指す。"
         example: true
-  instrument_post:
+  instrumentPost:
     type: "object"
     description: "楽器の登録情報"
     required:
@@ -376,7 +379,7 @@ definitions:
         default: true
         description: "よく使われる楽器かどうか。falseは特殊楽器を指す。"
         example: true
-  instrument_update:
+  instrumentUpdate:
     type: "object"
     description: "楽器の更新内容"
     properties:
@@ -422,7 +425,7 @@ definitions:
         default: true
         description: "よく使われる楽器かどうか。falseは特殊楽器を指す。"
         example: true
-  instrument_category:
+  instrumentCategory:
     type: "object"
     description: "楽器の分類"
     required:
@@ -445,35 +448,27 @@ definitions:
         format: "string"
         description: "楽器分類の日本語名"
         example: "woodwind"
-  
-  instrument_list:
-    type: "array"
-    description: "楽器情報の一覧"
-    items:
-      $ref: "#/definitions/instrument"
 
-  error_response:
+  errorResponse:
     type: "object"
     description: "エラーレスポンス"
     required:
     - "error"
     properties:
       error:
-        $ref: "#/definitions/error"
-  error:
-    type: "object"
-    description: "エラー情報"
-    required:
-    - "id"
-    - "message"
-    properties:
-      id:
-        type: "string"
-        format: "string"
-        description: "エラーID"
-        example: "error_id"
-      message:
-        type: "string"
-        format: "string"
-        description: "エラーメッセージ"
-        example: "error message"
+        type: "object"
+        description: "エラー情報"
+        required:
+        - "id"
+        - "message"
+        properties:
+          id:
+            type: "string"
+            format: "string"
+            description: "エラーID"
+            example: "error_id"
+          message:
+            type: "string"
+            format: "string"
+            description: "エラーメッセージ"
+            example: "error message"
