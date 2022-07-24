@@ -35,7 +35,7 @@ paths:
       parameters:
       - name: "target"
         in: "query"
-        description: "取得対象のテーブル名"
+        description: "取得対象のデータ分類"
         required: true
         type: "string"
         enum:
