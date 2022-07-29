@@ -1,6 +1,9 @@
 using Xunit;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.TestUtilities;
+using System.Text.Json;
+using MusicPF4AWSLambda.Resources;
+using System.Net;
 
 namespace MusicPF4AWSLambda.Tests;
 
@@ -13,8 +16,10 @@ public class FunctionTest
         // Invoke the lambda function and confirm the string was upper cased.
         var function = new Function();
         var context = new TestLambdaContext();
-        var upperCase = function.FunctionHandler("hello world", context);
+        Request req = new Request();
+        
+        var resp = function.FunctionHandler(req, context);
 
-        Assert.Equal("HELLO WORLD", upperCase);
+        Assert.Equal((int)HttpStatusCode.OK, resp.StatusCode);
     }
 }

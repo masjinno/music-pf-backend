@@ -7,16 +7,17 @@ hide circle
 entity "musics" as music {
     * id : UUID <<generated>>
     --
+    * category_id : text <<FK>>
     composer_id : UUID <<FK>>
     arranger_id : UUID <<FK>>
-    * composed_year : number
-    arranged_year : number
     * title_ja_jp : text
     title_en_us : text
     opus : text
     version : text
-    * category_id : text <<FK>>
     * instrumentation_id : UUID <<FK>>
+    composed_year : number
+    arranged_year : number
+    length : number
     * created_at : text <<generated>>
     updated_at : text <<generated>>
 }
