@@ -6,14 +6,16 @@
 * MusicPFのバックエンド環境は、AWSを利用して稼働する
 * 以下に構成を記載する (記載中)
 
+<!--
 ```plantuml
 @startuml
 :Hello world;
 :this is section1;
 @enduml
 ```
+-->
 
-# API Gateway
+# API仕様 (API Gateway)
 
 * 置き場：docs/api
 
@@ -32,7 +34,7 @@
     1. API Gatewayに対応した各API仕様ファイルが出力される (プレフィックス `aws-apigateway_` が付く)
     1. AWS GatewayのAPI作成時に、出力したAPI仕様ファイルをインポートする
   * APIインポート後、統合リクエスト設定より「Lambda プロキシ統合の使用」のチェックボックスにチェックを入れること。
-    ![APIGateway - 統合リクエスト設定画面](images/APIGateway_IntegrationRequest.png)
+    ![APIGateway - 統合リクエスト設定画面](images/APIGateway_IntegrationRequestSetting.png)
   * 生成されたインポート用ファイルはGit管理しないこと（.gitignore登録済み）
 
 # 内部処理 (AWS Lambda)
