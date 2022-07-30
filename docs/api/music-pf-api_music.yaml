@@ -161,7 +161,7 @@ paths:
           schema:
             type: "object"
             properties:
-              deleted_instruments:
+              deletedInstruments:
                 type: "array"
                 description: "楽器情報の一覧"
                 items:
@@ -221,7 +221,7 @@ paths:
             不正な入力
             * パスのidが存在しない
             * ボディのidがすでに存在する
-            * ボディのcategory_idが存在しない
+            * ボディのcategoryIdが存在しない
           schema:
             $ref: "#/definitions/errorResponse"
 
@@ -234,7 +234,7 @@ definitions:
   #       type: "array"
   #       items:
   #         $ref: "#/definitions/music"
-  #     music_categories:
+  #     musicCategories:
   #       type: "array"
   #       items:
   #         $ref: "#/definitions/musicCategory"
@@ -250,7 +250,7 @@ definitions:
   #       type: "array"
   #       items:
   #         $ref: "#/definitions/instrumentation"
-  #     instrumentation_categories:
+  #     instrumentationCategories:
   #       type: "array"
   #       items:
   #         $ref: "#/definitions/instrumentationCategory"
@@ -258,7 +258,7 @@ definitions:
   #       type: "array"
   #       items:
   #         $ref: "#/definitions/instrument"
-  #     instrument_categories:
+  #     instrumentCategories:
   #       type: "array"
   #       items:
   #         $ref: "#/definitions/instrumentCategory"
@@ -288,19 +288,19 @@ definitions:
       id:
         type: "string"
         format: "string"
-        description: "ID。指定ない場合はen_usの値となる。"
+        description: "ID。指定ない場合はenUsの値となる。"
         example: "flute"
-      ja_jp:
+      jaJp:
         type: "string"
         format: "string"
         description: "楽器の日本語名"
         example: "フルート"
-      en_us:
+      enUs:
         type: "string"
         format: "string"
         description: "楽器の英語名"
         example: "flute"
-      it_it:
+      itIt:
         type: "string"
         format: "string"
         description: "楽器のイタリア語名。指定ない場合は空となる。"
@@ -310,7 +310,7 @@ definitions:
         format: "string"
         description: "楽器の短縮名"
         example: "Fl."
-      category_id:
+      categoryId:
         type: "string"
         description: "楽器の分類"
         enum:
@@ -322,7 +322,7 @@ definitions:
         - "voice"
         - "other"
         example: "woodwind"
-      is_usual:
+      isUsual:
         type: "boolean"
         default: true
         description: "よく使われる楽器かどうか。falseは特殊楽器を指す。"
@@ -331,27 +331,27 @@ definitions:
     type: "object"
     description: "楽器の登録情報"
     required:
-    - "ja_jp"
-    - "en_us"
+    - "jaJp"
+    - "enUs"
     - "abbreviation"
-    - "category_id"
+    - "categoryId"
     properties:
       id:
         type: "string"
         format: "string"
-        description: "ID。指定ない場合はen_usの値となる。"
+        description: "ID。指定ない場合はenUsの値となる。"
         example: "flute"
-      ja_jp:
+      jaJp:
         type: "string"
         format: "string"
         description: "楽器の日本語名"
         example: "フルート"
-      en_us:
+      enUs:
         type: "string"
         format: "string"
         description: "楽器の英語名"
         example: "flute"
-      it_it:
+      itIt:
         type: "string"
         format: "string"
         description: "楽器のイタリア語名。指定ない場合は空となる。"
@@ -361,7 +361,7 @@ definitions:
         format: "string"
         description: "楽器の短縮名"
         example: "Fl."
-      category_id:
+      categoryId:
         type: "string"
         description: "楽器の分類"
         enum:
@@ -373,7 +373,7 @@ definitions:
         - "voice"
         - "other"
         example: "woodwind"
-      is_usual:
+      isUsual:
         type: "boolean"
         default: true
         description: "よく使われる楽器かどうか。falseは特殊楽器を指す。"
@@ -387,17 +387,17 @@ definitions:
         format: "string"
         description: "ID"
         example: "flute"
-      ja_jp:
+      jaJp:
         type: "string"
         format: "string"
         description: "楽器の日本語名"
         example: "フルート"
-      en_us:
+      enUs:
         type: "string"
         format: "string"
         description: "楽器の英語名"
         example: "flute"
-      it_it:
+      itIt:
         type: "string"
         format: "string"
         description: "楽器のイタリア語名"
@@ -407,7 +407,7 @@ definitions:
         format: "string"
         description: "楽器の短縮名"
         example: "Fl."
-      category_id:
+      categoryId:
         type: "string"
         description: "楽器の分類"
         enum:
@@ -419,7 +419,7 @@ definitions:
         - "voice"
         - "other"
         example: "woodwind"
-      is_usual:
+      isUsual:
         type: "boolean"
         default: true
         description: "よく使われる楽器かどうか。falseは特殊楽器を指す。"
@@ -429,20 +429,20 @@ definitions:
   #   description: "楽器の分類"
   #   required:
   #   - "id"
-  #   - "ja_jp"
-  #   - "en_us"
+  #   - "jaJp"
+  #   - "enUs"
   #   properties:
   #     id:
   #       type: "string"
   #       format: "string"
   #       description: "ID"
   #       example: "woodwind"
-  #     ja_jp:
+  #     jaJp:
   #       type: "string"
   #       format: "string"
   #       description: "楽器分類の日本語名"
   #       example: "木管楽器"
-  #     en_us:
+  #     enUs:
   #       type: "string"
   #       format: "string"
   #       description: "楽器分類の日本語名"
@@ -465,7 +465,7 @@ definitions:
             type: "string"
             format: "string"
             description: "エラーID"
-            example: "error_id"
+            example: "errorId"
           message:
             type: "string"
             format: "string"
