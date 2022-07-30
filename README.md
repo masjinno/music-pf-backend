@@ -17,6 +17,7 @@
 
 # API仕様 (API Gateway)
 
+* バックエンドの入り口となるAPIは、REST API により AWS Gateway 上で構築する。
 * 置き場：docs/api
 
   |ファイル名 |APIの用途 |
@@ -36,11 +37,14 @@
   * APIインポート後、統合リクエスト設定より「Lambda プロキシ統合の使用」のチェックボックスにチェックを入れること。
     ![APIGateway - 統合リクエスト設定画面](images/APIGateway_IntegrationRequestSetting.png)
   * 生成されたインポート用ファイルはGit管理しないこと（.gitignore登録済み）
+* operationIdは、内部処理の関数名(C#メソッド名およびAWS Lambdaの関数名)に一致させることとする。したがってPascalCaseで定義すること。
 
 # 内部処理 (AWS Lambda)
 
+* 内部処理はAWS Lambda上で動作させ、C#で実装する
 * 置き場：src/MusicPF4AWSLambda
   * MusicPF4AWSLambdaソリューションによって定義する
+* [AWS Toolkit for Visual Studio](https://docs.aws.amazon.com/toolkit-for-visual-studio/latest/user-guide/lambda-index.html) を使うこと
 * Lambda関数のI/Fは以下フォーマットを使用すること
 ```csharp
 using Amazon.Lambda.APIGatewayEvents;

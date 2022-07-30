@@ -87,7 +87,7 @@ paths:
   #     - "instrumentation"
   #     summary: "【未定義】{id}の楽器編成の詳細を取得する"
   #     description: ""
-  #     operationId: "getInstrumentation"
+  #     operationId: "GetInstrumentation"
   #     produces:
   #     - "application/json"
   #     parameters:
@@ -105,7 +105,7 @@ paths:
   #     - "instrumentation"
   #     summary: "【未定義】{id}の楽器編成の詳細を更新する"
   #     description: ""
-  #     operationId: "updateInstrumentation"
+  #     operationId: "UpdateInstrumentation"
   #     produces:
   #     - "application/json"
   #     parameters:
@@ -125,7 +125,7 @@ paths:
       - "instrument"
       summary: "新しい楽器を登録する"
       description: "楽器編成に使われる楽器を新規登録する。"
-      operationId: "postInstrument"
+      operationId: "PostInstrument"
       consumes:
       - "application/json"
       produces:
@@ -152,7 +152,7 @@ paths:
       - "instrument"
       summary: "使われていない楽器を削除する"
       description: "編成情報に紐づいていない楽器をすべて削除する"
-      operationId: "deleteInstruments"
+      operationId: "DeleteInstruments"
       produces:
       - "application/json"
       responses:
@@ -172,7 +172,7 @@ paths:
       - "instrument"
       summary: "楽器の詳細を取得する"
       description: "楽器の詳細を取得する"
-      operationId: "getInstrument"
+      operationId: "GetInstrument"
       produces:
       - "application/json"
       parameters:
