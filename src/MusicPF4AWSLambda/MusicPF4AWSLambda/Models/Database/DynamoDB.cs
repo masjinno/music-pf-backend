@@ -1,7 +1,7 @@
 ﻿using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
 
-namespace MusicPF4AWSLambda.Models
+namespace MusicPF4AWSLambda.Models.Database
 {
     public abstract class DynamoDB
     {
@@ -15,7 +15,7 @@ namespace MusicPF4AWSLambda.Models
         /// <param name="tableName">テーブル名</param>
         protected DynamoDB(string tableName)
         {
-            this.productCatalog = Table.LoadTable(this.client, tableName);
+            productCatalog = Table.LoadTable(client, tableName);
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace MusicPF4AWSLambda.Models
         /// <returns>アイテム登録が成功したか</returns>
         public bool PutItem(object item)
         {
-            Task<Document> response = this.productCatalog.PutItemAsync(this.GenerateDocument(item));
+            Task<Document> response = productCatalog.PutItemAsync(GenerateDocument(item));
             return response.IsCompletedSuccessfully;
         }
 

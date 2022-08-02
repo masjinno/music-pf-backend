@@ -1,7 +1,7 @@
 ﻿using Amazon.DynamoDBv2;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
-using MusicPF4AWSLambda.Models;
+using MusicPF4AWSLambda.Models.Database;
 using MusicPF4AWSLambda.Resources;
 using System.Net;
 using System.Text.Json;

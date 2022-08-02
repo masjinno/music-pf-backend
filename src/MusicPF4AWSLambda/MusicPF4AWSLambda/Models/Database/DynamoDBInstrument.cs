@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MusicPF4AWSLambda.Models
+namespace MusicPF4AWSLambda.Models.Database
 {
     /// <summary>
     /// Instrumentsテーブルを操作するためのクラス
@@ -15,7 +15,7 @@ namespace MusicPF4AWSLambda.Models
     {
         private const string tableName = "instruments";
 
-        public DynamoDBInstrument() : base(DynamoDBInstrument.tableName)
+        public DynamoDBInstrument() : base(tableName)
         {
             // do nothing
         }
@@ -29,7 +29,7 @@ namespace MusicPF4AWSLambda.Models
         {
             if (item is not Instrument)
             {
-                throw new ArgumentException("Argument " + nameof(item) + " is not " + typeof(Instrument).FullName, 
+                throw new ArgumentException("Argument " + nameof(item) + " is not " + typeof(Instrument).FullName,
                     nameof(item));
             }
             Instrument instrument = (Instrument)item;
