@@ -20,7 +20,7 @@
 # API仕様 (API Gateway)
 
 * バックエンドの入り口となるAPIは、REST API により AWS Gateway 上で構築する。
-* 置き場：docs/api
+* 置き場：docs/api/v1
 
   |ファイル名 |APIの用途 |
   |:-- |:-- |
@@ -33,7 +33,7 @@
 * AWSのAPI GatewayがSwaggerのインポートをサポートしている
   * パス等にアンダースコアが含まれるとインポートできない。そのため、APIはcamelCaseで定義することとする。
   * Swagger表記の一部記法が存在するとAPI Gatewayにインポートできない。以下の手順に基づきインポートすること。
-    1. export_awsgateway.shを /docs/api 上で実行する
+    1. export_awsgateway.shを /docs/api/v1 上で実行する
     1. API Gatewayに対応した各API仕様ファイルが出力される (プレフィックス `aws-apigateway_` が付く)
     1. AWS GatewayのAPI作成時に、出力したAPI仕様ファイルをインポートする
   * APIインポート後、統合リクエスト設定より「Lambda プロキシ統合の使用」のチェックボックスにチェックを入れること。
