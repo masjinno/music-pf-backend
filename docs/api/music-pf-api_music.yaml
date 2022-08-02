@@ -9,7 +9,6 @@ info:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 host: "<url-id>.lambda-url.<region>.on.aws"
-basePath: "/v1"
 tags:
 - name: "dev"
   description: "開発用API"
@@ -22,7 +21,7 @@ tags:
 schemes:
 - "https"
 paths:
-  # /dev/tables/summary:
+  # /v1/dev/tables/summary:
   #   get:
   #     tags:
   #     - "dev"
@@ -48,7 +47,7 @@ paths:
   #         description: "不正な入力"
   #         schema:
   #           $ref: "#/definitions/errorResponse"
-  # /music:
+  # /v1/music:
   #   post:
   #     tags:
   #     - "music"
@@ -56,7 +55,7 @@ paths:
   #     responses:
   #       "400":
   #         description: "不正な入力"
-  # /music/search:
+  # /v1/music/search:
   #   post:
   #     tags:
   #     - "music"
@@ -65,7 +64,7 @@ paths:
   #       "400":
   #         description: "不正な入力"
 
-  # /music/instrumentation:
+  # /v1/music/instrumentation:
   #   post:
   #     tags:
   #     - "instrumentation"
@@ -73,7 +72,7 @@ paths:
   #     responses:
   #       "400":
   #         description: "不正な入力"
-  # /music/instrumentation/search:
+  # /v1/music/instrumentation/search:
   #   post:
   #     tags:
   #     - "instrumentation"
@@ -81,7 +80,7 @@ paths:
   #     responses:
   #       "400":
   #         description: "不正な入力"
-  # /music/instrumentation/{id}:
+  # /v1/music/instrumentation/{id}:
   #   get:
   #     tags:
   #     - "instrumentation"
@@ -119,7 +118,7 @@ paths:
   #       "400":
   #         description: "不正な入力"
 
-  /music/instrumentation/instrument:
+  /v1/music/instrumentation/instrument:
     post:
       tags:
       - "instrument"
@@ -166,7 +165,7 @@ paths:
                 description: "楽器情報の一覧"
                 items:
                   $ref: "#/definitions/instrument"
-  /music/instrumentation/instrument/{id}:
+  /v1/music/instrumentation/instrument/{id}:
     get:
       tags:
       - "instrument"
@@ -223,7 +222,7 @@ paths:
             * ボディのcategoryIdが存在しない
           schema:
             $ref: "#/definitions/errorResponse"
-  /music/instrumentation/instrument/categories:
+  /v1/music/instrumentation/instrument/categories:
     get:
       tags:
       - "instrument"
