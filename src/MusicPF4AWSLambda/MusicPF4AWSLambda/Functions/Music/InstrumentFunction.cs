@@ -1,13 +1,10 @@
-﻿using Amazon.Lambda.APIGatewayEvents;
+﻿using Amazon.DynamoDBv2;
+using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
+using MusicPF4AWSLambda.Models;
 using MusicPF4AWSLambda.Resources;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace MusicPF4AWSLambda.Functions.Music
 {
@@ -16,6 +13,13 @@ namespace MusicPF4AWSLambda.Functions.Music
     /// </summary>
     public class InstrumentFunction
     {
+        private static DynamoDBInstrument dynamoDBInstrument;
+
+        public InstrumentFunction()
+        {
+            InstrumentFunction.dynamoDBInstrument = new DynamoDBInstrument();
+        }
+
         /// <summary>
         /// 楽器編成に使われる楽器を新規登録する
         /// </summary>
@@ -25,7 +29,34 @@ namespace MusicPF4AWSLambda.Functions.Music
         public APIGatewayProxyResponse PostInstrument(Request request, ILambdaContext context)
         {
             InstrumentPost? reqBody;
-            reqBody = JsonSerializer.Deserialize<InstrumentPost>(request.Body);
+            try
+            {
+                reqBody = JsonSerializer.Deserialize<InstrumentPost>(request.Body);
+
+                InstrumentFunction.dynamoDBInstrument.PutItem(reqBody.Instrument);
+            }
+            catch (NullReferenceException ex)
+            {
+                return new APIGatewayProxyResponse
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                    Body = JsonSerializer.Serialize(
+                        new ErrorResponse(
+                            "instrument.invalid_parameter",
+                            ex.Message))
+                };
+            }
+            catch (Exception ex)
+            {
+                return new APIGatewayProxyResponse
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                    Body = JsonSerializer.Serialize(
+                        new ErrorResponse(
+                            ex.GetType().FullName,
+                            ex.Message))
+                };
+            }
 
             return new APIGatewayProxyResponse
             {

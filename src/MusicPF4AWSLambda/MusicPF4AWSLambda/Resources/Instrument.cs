@@ -29,7 +29,5 @@ namespace MusicPF4AWSLambda.Resources
 
         [JsonPropertyName("isUsual")]
         public bool? IsUsual { get; set; }
-
-
     }
 }

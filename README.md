@@ -15,6 +15,8 @@
 ```
 -->
 
+* AWSによる構築の方法については、[基本的なウェブアプリケーションを構築する](https://aws.amazon.com/jp/getting-started/hands-on/build-web-app-s3-lambda-api-gateway-dynamodb/)のハンズオンを参考にすること
+
 # API仕様 (API Gateway)
 
 * バックエンドの入り口となるAPIは、REST API により AWS Gateway 上で構築する。
@@ -37,7 +39,7 @@
   * APIインポート後、統合リクエスト設定より「Lambda プロキシ統合の使用」のチェックボックスにチェックを入れること。
     ![APIGateway - 統合リクエスト設定画面](images/APIGateway_IntegrationRequestSetting.png)
   * 生成されたインポート用ファイルはGit管理しないこと（.gitignore登録済み）
-* operationIdは、内部処理の関数名(C#メソッド名およびAWS Lambdaの関数名)に一致させることとする。したがってPascalCaseで定義すること。
+* operationIdは、内部処理の関数名(C#メソッド名およびAWS Lambdaの関数名)に一致させることとする。したがって、C#の規約に基づきPascalCaseで定義すること。
 
 # 内部処理 (AWS Lambda)
 
@@ -45,7 +47,7 @@
 * 置き場：src/MusicPF4AWSLambda
   * MusicPF4AWSLambdaソリューションによって定義する
 * [AWS Toolkit for Visual Studio](https://docs.aws.amazon.com/toolkit-for-visual-studio/latest/user-guide/lambda-index.html) を使うこと
-* Lambda関数のI/Fは以下フォーマットを使用すること
+* Lambda関数のI/Fは以下フォーマットを使用すること (参考：[プロキシ統合のための Lambda 関数の入力形式](https://docs.aws.amazon.com/ja_jp/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format))
 ```csharp
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
@@ -94,6 +96,7 @@ public class FunctionSample
     }
 }
 ```
+* DynamoDBを操作するためのコードは [例: AWS SDK for .NET ドキュメントモデルを使用した CRUD オペレーション](https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/ItemCRUDDotNetDocumentAPI.html) を参照
 
 # データベース (DynamoDB)
 

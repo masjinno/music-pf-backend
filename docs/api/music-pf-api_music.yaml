@@ -192,8 +192,7 @@ paths:
       tags:
       - "instrument"
       summary: "楽器情報を更新する"
-      description:
-        "楽器情報を更新する。"
+      description: "楽器情報を更新する。"
       consumes:
       - "application/json"
       produces:
@@ -224,6 +223,25 @@ paths:
             * ボディのcategoryIdが存在しない
           schema:
             $ref: "#/definitions/errorResponse"
+  /music/instrumentation/instrument/categories:
+    get:
+      tags:
+      - "instrument"
+      summary: "楽器分類一覧を取得する"
+      description: "楽器の分類の一覧を取得する"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            type: "object"
+            properties:
+              instrumentCategories:
+                type: "array"
+                description: "楽器分類の一覧"
+                items:
+                  $ref: "#/definitions/instrumentCategory"
 
 definitions:
   # musicSummary:
@@ -424,29 +442,29 @@ definitions:
         default: true
         description: "よく使われる楽器かどうか。falseは特殊楽器を指す。"
         example: true
-  # instrumentCategory:
-  #   type: "object"
-  #   description: "楽器の分類"
-  #   required:
-  #   - "id"
-  #   - "jaJp"
-  #   - "enUs"
-  #   properties:
-  #     id:
-  #       type: "string"
-  #       format: "string"
-  #       description: "ID"
-  #       example: "woodwind"
-  #     jaJp:
-  #       type: "string"
-  #       format: "string"
-  #       description: "楽器分類の日本語名"
-  #       example: "木管楽器"
-  #     enUs:
-  #       type: "string"
-  #       format: "string"
-  #       description: "楽器分類の日本語名"
-  #       example: "woodwind"
+  instrumentCategory:
+    type: "object"
+    description: "楽器の分類"
+    required:
+    - "id"
+    - "jaJp"
+    - "enUs"
+    properties:
+      id:
+        type: "string"
+        format: "string"
+        description: "ID"
+        example: "woodwind"
+      jaJp:
+        type: "string"
+        format: "string"
+        description: "楽器分類の日本語名"
+        example: "木管楽器"
+      enUs:
+        type: "string"
+        format: "string"
+        description: "楽器分類の日本語名"
+        example: "woodwind"
 
   errorResponse:
     type: "object"
