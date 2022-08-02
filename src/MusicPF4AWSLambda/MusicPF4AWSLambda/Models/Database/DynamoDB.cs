@@ -5,9 +5,9 @@ namespace MusicPF4AWSLambda.Models.Database
 {
     public abstract class DynamoDB
     {
-        protected AmazonDynamoDBClient client = new AmazonDynamoDBClient();
+        private AmazonDynamoDBClient client = new AmazonDynamoDBClient();
 
-        private Table productCatalog;
+        protected Table productCatalog;
 
         /// <summary>
         /// DynamoDB使用の準備
@@ -23,10 +23,22 @@ namespace MusicPF4AWSLambda.Models.Database
         /// </summary>
         /// <param name="item"></param>
         /// <returns>アイテム登録が成功したか</returns>
-        public bool PutItem(object item)
+        public virtual bool PutItem(object item)
         {
             Task<Document> response = productCatalog.PutItemAsync(GenerateDocument(item));
             return response.IsCompletedSuccessfully;
+        }
+
+        /// <summary>
+        /// アイテム全件取得
+        /// テーブルのサイズが大きい場合には処理が重くなるため使用しないこと。
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns>アイテム全件</returns>
+        public virtual List<object> GetAllItems()
+        {
+            Search response = productCatalog.Scan(new ScanFilter());
+            return response.GetNextSetAsync().Result.Select(doc => GenerateObject(doc)).ToList();
         }
 
         /// <summary>
@@ -36,5 +48,12 @@ namespace MusicPF4AWSLambda.Models.Database
         /// <param name="item"></param>
         /// <returns></returns>
         protected abstract Document GenerateDocument(object item);
+
+        /// <summary>
+        /// Documentをオブジェクトに変換する
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        protected abstract object GenerateObject(Document item);
     }
 }

@@ -192,6 +192,7 @@ paths:
       - "instrument"
       summary: "楽器情報を更新する"
       description: "楽器情報を更新する。"
+      operationId: "PutInstrument"
       consumes:
       - "application/json"
       produces:
@@ -228,6 +229,7 @@ paths:
       - "instrument"
       summary: "楽器分類一覧を取得する"
       description: "楽器の分類の一覧を取得する"
+      operationId: "GetInstrumentCategories"
       produces:
       - "application/json"
       responses:

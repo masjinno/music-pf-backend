@@ -1,9 +1,8 @@
-﻿using Amazon.DynamoDBv2;
-using Amazon.Lambda.APIGatewayEvents;
+﻿using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
+using MusicPF4AWSLambda.Models;
 using MusicPF4AWSLambda.Models.Database;
 using MusicPF4AWSLambda.Resources;
-using System.Net;
 using System.Text.Json;
 
 namespace MusicPF4AWSLambda.Functions.Music
@@ -14,54 +13,48 @@ namespace MusicPF4AWSLambda.Functions.Music
     public class InstrumentFunction
     {
         private static DynamoDBInstrument dynamoDBInstrument;
+        private static DynamoDBInstrumentCategory dynamoDBInstrumentCategory;
+        private InstrumentLogic logic;
 
         public InstrumentFunction()
         {
             InstrumentFunction.dynamoDBInstrument = new DynamoDBInstrument();
+            InstrumentFunction.dynamoDBInstrumentCategory = new DynamoDBInstrumentCategory();
+            this.logic = new InstrumentLogic();
         }
 
         /// <summary>
         /// 楽器編成に使われる楽器を新規登録する
+        /// POST: /v1/music/instrumentation/instrument
         /// </summary>
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
         public APIGatewayProxyResponse PostInstrument(Request request, ILambdaContext context)
         {
-            InstrumentPost? reqBody;
-            try
-            {
-                reqBody = JsonSerializer.Deserialize<InstrumentPost>(request.Body);
-
-                InstrumentFunction.dynamoDBInstrument.PutItem(reqBody.Instrument);
-            }
-            catch (NullReferenceException ex)
-            {
-                return new APIGatewayProxyResponse
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Body = JsonSerializer.Serialize(
-                        new ErrorResponse(
-                            "instrument.invalid_parameter",
-                            ex.Message))
-                };
-            }
-            catch (Exception ex)
-            {
-                return new APIGatewayProxyResponse
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Body = JsonSerializer.Serialize(
-                        new ErrorResponse(
-                            ex.GetType().FullName,
-                            ex.Message))
-                };
-            }
-
+            InstrumentPost? reqBody = JsonSerializer.Deserialize<InstrumentPost>(request.Body);
+            (int status, object respBody) = this.logic.PostInstrument(reqBody, InstrumentFunction.dynamoDBInstrument);
             return new APIGatewayProxyResponse
             {
-                StatusCode = (int)HttpStatusCode.OK,
-                Body = JsonSerializer.Serialize(reqBody)
+                StatusCode = status,
+                Body = JsonSerializer.Serialize(respBody)
+            };
+        }
+
+        /// <summary>
+        /// 楽器分類一覧を取得する
+        /// GET: /v1/music/instrumentation/instrument/categories
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public APIGatewayProxyResponse GetInstrumentCategories(Request request, ILambdaContext context)
+        {
+            (int status, object respBody) = this.logic.GetInstrumentCategories(InstrumentFunction.dynamoDBInstrumentCategory);
+            return new APIGatewayProxyResponse
+            {
+                StatusCode = status,
+                Body = JsonSerializer.Serialize(respBody)
             };
         }
     }

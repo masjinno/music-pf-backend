@@ -1,10 +1,5 @@
 ﻿using Amazon.DynamoDBv2.DocumentModel;
 using MusicPF4AWSLambda.Resources;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MusicPF4AWSLambda.Models.Database
 {
@@ -15,7 +10,7 @@ namespace MusicPF4AWSLambda.Models.Database
     {
         private const string tableName = "instruments";
 
-        public DynamoDBInstrument() : base(tableName)
+        public DynamoDBInstrument() : base(DynamoDBInstrument.tableName)
         {
             // do nothing
         }
@@ -37,13 +32,32 @@ namespace MusicPF4AWSLambda.Models.Database
             Document ret = new Document();
             ret["id"] = instrument.Id;
             ret["ja_jp"] = instrument.NameJaJp;
-            ret["en_us"] = instrument.NmaeEnUs;
-            ret["it_it"] = instrument.NmaeItIt;
+            ret["en_us"] = instrument.NameEnUs;
+            ret["it_it"] = instrument.NameItIt;
             ret["abbreviation"] = instrument.Abbreviation;
             ret["category_id"] = instrument.CategoryId;
             ret["is_usual"] = instrument.IsUsual;
 
             return ret;
+        }
+
+        /// <summary>
+        /// Documentをオブジェクトに変換
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        protected override object GenerateObject(Document item)
+        {
+            return new Instrument
+            {
+                Id = item["id"],
+                NameJaJp = item["ja_jp"],
+                NameEnUs = item["en_us"],
+                NameItIt = item["it_it"],
+                Abbreviation = item["abbreviation"],
+                CategoryId = item["category_id"],
+                IsUsual = item["is_usual"].Equals("1")
+            };
         }
     }
 }
