@@ -4,11 +4,11 @@ using System.Text.Json;
 
 namespace MusicPF4AWSLambda.Models.Database
 {
-    public class DynamoDBInstrumentCategory : DynamoDB
+    internal class DynamoDBInstrumentCategory : DynamoDB
     {
         private const string tableName = "instrument_categories";
 
-        public DynamoDBInstrumentCategory() : base(DynamoDBInstrumentCategory.tableName)
+        internal DynamoDBInstrumentCategory() : base(DynamoDBInstrumentCategory.tableName)
         {
             // do nothing
         }
@@ -18,7 +18,7 @@ namespace MusicPF4AWSLambda.Models.Database
         /// InstrumentCategoryテーブルは新規のアイテム登録を受け付けないため、InvalidOperationExceptionを投げる
         /// </summary>
         /// <exception cref="InvalidOperationException">呼び出し禁止メソッド</exception>
-        public override bool PutItem(object item)
+        internal override bool PutItem(object item)
         {
             throw new InvalidOperationException("Prohibit to call PutItem method for instrument_category table.");
         }

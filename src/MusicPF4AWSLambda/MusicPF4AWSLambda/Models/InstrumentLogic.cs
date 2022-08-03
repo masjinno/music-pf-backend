@@ -4,7 +4,7 @@ using System.Net;
 
 namespace MusicPF4AWSLambda.Models
 {
-    public class InstrumentLogic
+    internal class InstrumentLogic
     {
         /// <summary>
         /// 楽器登録処理
@@ -15,7 +15,7 @@ namespace MusicPF4AWSLambda.Models
         /// status: レスポンスのHTTPステータス
         /// body: レスポンスボディオブジェクト
         /// </returns>
-        public (int status, object body) PostInstrument(InstrumentPost request, DynamoDBInstrument db)
+        internal (int status, object body) PostInstrument(InstrumentPost request, DynamoDBInstrument db)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace MusicPF4AWSLambda.Models
         /// </summary>
         /// <param name="db"></param>
         /// <returns></returns>
-        public (int status, object respBody) GetInstrumentCategories(DynamoDBInstrumentCategory db)
+        internal (int status, object respBody) GetInstrumentCategories(DynamoDBInstrumentCategory db)
         {
             try
             {

@@ -4,6 +4,7 @@ using Amazon.Lambda.TestUtilities;
 using System.Text.Json;
 using MusicPF4AWSLambda.Resources;
 using System.Net;
+using MusicPF4AWSLambda.Functions.Music;
 
 namespace MusicPF4AWSLambda.Tests;
 
@@ -21,5 +22,11 @@ public class FunctionTest
         var resp = function.FunctionHandler(req, context);
 
         Assert.Equal((int)HttpStatusCode.OK, resp.StatusCode);
+    }
+
+    public void Test()
+    {
+        var function = new InstrumentFunction();
+        //function.GetInstrumentCategories
     }
 }

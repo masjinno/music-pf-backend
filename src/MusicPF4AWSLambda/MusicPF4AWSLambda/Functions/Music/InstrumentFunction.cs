@@ -32,7 +32,8 @@ namespace MusicPF4AWSLambda.Functions.Music
         /// <returns></returns>
         public APIGatewayProxyResponse PostInstrument(Request request, ILambdaContext context)
         {
-            InstrumentPost? reqBody = JsonSerializer.Deserialize<InstrumentPost>(request.Body);
+            Console.WriteLine("Request=" + JsonSerializer.Serialize<Request>(request));
+            InstrumentPost reqBody = JsonSerializer.Deserialize<InstrumentPost>(request.Body);
             (int status, object respBody) = this.logic.PostInstrument(reqBody, InstrumentFunction.dynamoDBInstrument);
             return new APIGatewayProxyResponse
             {
@@ -50,6 +51,7 @@ namespace MusicPF4AWSLambda.Functions.Music
         /// <returns></returns>
         public APIGatewayProxyResponse GetInstrumentCategories(Request request, ILambdaContext context)
         {
+            Console.WriteLine("Request=" + JsonSerializer.Serialize<Request>(request));
             (int status, object respBody) = this.logic.GetInstrumentCategories(InstrumentFunction.dynamoDBInstrumentCategory);
             return new APIGatewayProxyResponse
             {

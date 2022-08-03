@@ -5,15 +5,14 @@ namespace MusicPF4AWSLambda.Resources
 {
     public class Request
     {
-
         [JsonPropertyName("resource")]
-        public string? Resource { get; set; }
+        public string Resource { get; set; }
 
         [JsonPropertyName("path")]
-        public string? Path { get; set; }
+        public string Path { get; set; }
 
         [JsonPropertyName("httpMethod")]
-        public string? HttpMethod { get; set; }
+        public string HttpMethod { get; set; }
 
         [JsonPropertyName("headers")]
         public JsonElement Headers { get; set; }

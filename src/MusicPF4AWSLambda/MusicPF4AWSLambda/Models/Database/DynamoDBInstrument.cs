@@ -6,11 +6,11 @@ namespace MusicPF4AWSLambda.Models.Database
     /// <summary>
     /// Instrumentsテーブルを操作するためのクラス
     /// </summary>
-    public class DynamoDBInstrument : DynamoDB
+    internal class DynamoDBInstrument : DynamoDB
     {
         private const string tableName = "instruments";
 
-        public DynamoDBInstrument() : base(DynamoDBInstrument.tableName)
+        internal DynamoDBInstrument() : base(DynamoDBInstrument.tableName)
         {
             // do nothing
         }

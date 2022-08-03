@@ -3,7 +3,7 @@ using Amazon.DynamoDBv2.DocumentModel;
 
 namespace MusicPF4AWSLambda.Models.Database
 {
-    public abstract class DynamoDB
+    internal abstract class DynamoDB
     {
         private AmazonDynamoDBClient client = new AmazonDynamoDBClient();
 
@@ -23,7 +23,7 @@ namespace MusicPF4AWSLambda.Models.Database
         /// </summary>
         /// <param name="item"></param>
         /// <returns>アイテム登録が成功したか</returns>
-        public virtual bool PutItem(object item)
+        internal virtual bool PutItem(object item)
         {
             Task<Document> response = productCatalog.PutItemAsync(GenerateDocument(item));
             return response.IsCompletedSuccessfully;
@@ -35,7 +35,7 @@ namespace MusicPF4AWSLambda.Models.Database
         /// </summary>
         /// <param name="item"></param>
         /// <returns>アイテム全件</returns>
-        public virtual List<object> GetAllItems()
+        internal virtual List<object> GetAllItems()
         {
             Search response = productCatalog.Scan(new ScanFilter());
             return response.GetNextSetAsync().Result.Select(doc => GenerateObject(doc)).ToList();
