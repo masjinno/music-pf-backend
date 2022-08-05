@@ -45,14 +45,23 @@ namespace MusicPF4AWSLambda.Models
         /// <summary>
         /// 楽器分類一覧取得処理
         /// </summary>
+        /// <param name="categoryId"></param>
         /// <param name="db"></param>
         /// <returns></returns>
-        internal (int status, object respBody) GetInstrumentCategories(DynamoDBInstrumentCategory db)
+        internal (int status, object respBody) GetInstrumentCategories(string? categoryId, DynamoDBInstrumentCategory db)
         {
             try
             {
-                List<InstrumentCategory> allCategories = db.GetAllItems().Select(i => (InstrumentCategory)i).ToList();
-                return ((int)HttpStatusCode.OK, allCategories);
+                List<InstrumentCategory> categories;
+                if (String.IsNullOrEmpty(categoryId))
+                {
+                    categories = db.GetAllItems().Select(i => (InstrumentCategory)i).ToList();
+                }
+                else
+                {
+                    categories = new List<InstrumentCategory>() { (InstrumentCategory)db.GetItemById(categoryId) };
+                }
+                return ((int)HttpStatusCode.OK, categories);
             }
             catch (Exception ex)
             {

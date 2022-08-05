@@ -15,7 +15,7 @@ namespace MusicPF4AWSLambda.Models.Database
         /// <param name="tableName">テーブル名</param>
         protected DynamoDB(string tableName)
         {
-            productCatalog = Table.LoadTable(client, tableName);
+            this.productCatalog = Table.LoadTable(client, tableName);
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace MusicPF4AWSLambda.Models.Database
         /// <returns>アイテム登録が成功したか</returns>
         internal virtual bool PutItem(object item)
         {
-            Task<Document> response = productCatalog.PutItemAsync(GenerateDocument(item));
+            Task<Document> response = this.productCatalog.PutItemAsync(this.GenerateDocument(item));
             return response.IsCompletedSuccessfully;
         }
 
@@ -37,8 +37,18 @@ namespace MusicPF4AWSLambda.Models.Database
         /// <returns>アイテム全件</returns>
         internal virtual List<object> GetAllItems()
         {
-            Search response = productCatalog.Scan(new ScanFilter());
-            return response.GetNextSetAsync().Result.Select(doc => GenerateObject(doc)).ToList();
+            Search response = this.productCatalog.Scan(new ScanFilter());
+            return response.GetNextSetAsync().Result.Select(doc => this.GenerateObject(doc)).ToList();
+        }
+
+        /// <summary>
+        /// IDのアイテムを取得
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        internal virtual object GetItemById(Primitive id)
+        {
+            return this.GenerateObject(this.productCatalog.GetItemAsync(id).Result);
         }
 
         /// <summary>
