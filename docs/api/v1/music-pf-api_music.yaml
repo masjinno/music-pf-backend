@@ -213,6 +213,11 @@ paths:
       responses:
         "200":
           description: "成功"
+          schema:
+            type: "object"
+            properties:
+              instrument:
+                $ref: "#/definitions/instrument"
         "400":
           description: "不正な入力"
           schema:
