@@ -23,6 +23,10 @@ namespace MusicPF4AWSLambda.Resources
         public string CategoryId { get; set; }
 
         [JsonPropertyName("isUsual")]
-        public bool IsUsual { get; set; }
+        public Boolean IsUsual { get; set; }
+
+        // Editableは編集可否を指す。
+        [JsonIgnore]
+        public Boolean Editable { get; set; } = true;
     }
 }

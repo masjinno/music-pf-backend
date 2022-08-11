@@ -7,7 +7,7 @@ namespace MusicPF4AWSLambda.Models.Database
     {
         private AmazonDynamoDBClient client = new AmazonDynamoDBClient();
 
-        protected Table productCatalog;
+        protected Table table;
 
         /// <summary>
         /// DynamoDB使用の準備
@@ -15,7 +15,7 @@ namespace MusicPF4AWSLambda.Models.Database
         /// <param name="tableName">テーブル名</param>
         protected DynamoDB(string tableName)
         {
-            this.productCatalog = Table.LoadTable(client, tableName);
+            this.table = Table.LoadTable(client, tableName);
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace MusicPF4AWSLambda.Models.Database
         /// <returns>アイテム登録が成功したか</returns>
         internal virtual bool PutItem(object item)
         {
-            Task<Document> response = this.productCatalog.PutItemAsync(this.GenerateDocument(item));
+            Task<Document> response = this.table.PutItemAsync(this.GenerateDocument(item));
             return response.IsCompletedSuccessfully;
         }
 
@@ -35,9 +35,9 @@ namespace MusicPF4AWSLambda.Models.Database
         /// </summary>
         /// <param name="item"></param>
         /// <returns>アイテム全件</returns>
-        internal virtual List<object> GetAllItems()
+        internal virtual List<object> RetrieveAllItems()
         {
-            Search response = this.productCatalog.Scan(new ScanFilter());
+            Search response = this.table.Scan(new ScanFilter());
             return response.GetNextSetAsync().Result.Select(doc => this.GenerateObject(doc)).ToList();
         }
 
@@ -46,9 +46,26 @@ namespace MusicPF4AWSLambda.Models.Database
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        internal virtual object GetItemById(Primitive id)
+        /// <exception cref="ArgumentNullException">引数が不正なnull</exception>
+        /// <exception cref="ArgumentException">引数が不正</exception>
+        /// <exception cref="NullReferenceException">idに該当する楽器なし</exception>
+        internal virtual object RetrieveItemById(Primitive id)
         {
-            return this.GenerateObject(this.productCatalog.GetItemAsync(id).Result);
+            if (id == null) throw new ArgumentNullException();
+            if (id == String.Empty) throw new ArgumentException();
+            return this.GenerateObject(this.table.GetItemAsync(id).Result);
+        }
+
+        /// <summary>
+        /// IDのアイテムを削除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        internal virtual bool DeleteItemById(Primitive id)
+        {
+            if (id == null) throw new ArgumentNullException();
+            if (id == String.Empty) throw new ArgumentException();
+            return this.table.DeleteItemAsync(id).IsCompleted;
         }
 
         /// <summary>
@@ -65,5 +82,19 @@ namespace MusicPF4AWSLambda.Models.Database
         /// <param name="item"></param>
         /// <returns></returns>
         protected abstract object GenerateObject(Document item);
+
+        /// <summary>
+        /// Booleanが期待されるアイテムの値を取得する。
+        /// PutItemメソッドでbool値を格納した場合、DB内部では数値(0 or 1)で格納される。
+        /// しかし、DynamoDBとしてはbool値で保持することも可能(AWSコンソール上で操作する)なので、どちらの場合にも対応する処理を行う。
+        /// </summary>
+        /// <param name="targetValue"></param>
+        /// <returns></returns>
+        protected bool ReadBooleanValue(DynamoDBEntry targetValue)
+        {
+            Console.WriteLine("★targetValue=" + targetValue);
+            Console.WriteLine("★return: " + ((targetValue.GetType() == typeof(bool)) ? (bool)targetValue : (targetValue == "1")));
+            return (targetValue.GetType() == typeof(bool)) ? (bool)targetValue : (targetValue == "1");
+        }
     }
 }

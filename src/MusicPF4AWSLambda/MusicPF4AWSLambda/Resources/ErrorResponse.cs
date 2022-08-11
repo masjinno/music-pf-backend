@@ -18,6 +18,15 @@ namespace MusicPF4AWSLambda.Resources
             };
         }
 
+        public ErrorResponse(ErrorConstants error)
+        {
+            this.Error = new Error
+            {
+                Id = error.Id,
+                Message = error.Message
+            };
+        }
+
         [JsonPropertyName("error")]
         public Error Error { get; set; }
     }

@@ -37,6 +37,7 @@ namespace MusicPF4AWSLambda.Models.Database
             ret["abbreviation"] = instrument.Abbreviation;
             ret["category_id"] = instrument.CategoryId;
             ret["is_usual"] = instrument.IsUsual;
+            ret["editable"] = instrument.Editable;
 
             return ret;
         }
@@ -56,7 +57,8 @@ namespace MusicPF4AWSLambda.Models.Database
                 NameItIt = item["it_it"],
                 Abbreviation = item["abbreviation"],
                 CategoryId = item["category_id"],
-                IsUsual = item["is_usual"].Equals("1")
+                IsUsual = this.ReadBooleanValue(item["is_usual"]),
+                Editable = this.ReadBooleanValue(item["editable"])
             };
         }
     }

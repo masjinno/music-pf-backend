@@ -93,6 +93,7 @@ entity "instruments" as instrument {
     * abbreviation : text
     * category : text <<FK>>
     * is_usual : bool
+    editable : bool
     * created_at : text <<generated>>
     updated_at : text <<generated>>
 }

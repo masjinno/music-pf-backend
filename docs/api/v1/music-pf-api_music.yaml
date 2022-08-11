@@ -143,6 +143,70 @@ paths:
           description: "不正な入力"
           schema:
             $ref: "#/definitions/errorResponse"
+    get:
+      tags:
+      - "instrument"
+      summary: "楽器の詳細を取得する"
+      description: |
+        クエリで指定されたIDの楽器の詳細を取得する。
+        クエリIDは複数指定可能。
+        ただし、不正なIDが1つでも含まれていた場合、取得は失敗する。
+      operationId: "GetInstrument"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "query"
+        description: "楽器ID"
+        required: true
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      responses:
+        "200":
+          description: "成功"
+          schema:
+            $ref: "#/definitions/instrumentList"
+        "400":
+          description: "不正な入力"
+          schema:
+            $ref: "#/definitions/errorResponse"
+    put:
+      tags:
+      - "instrument"
+      summary: "楽器情報を更新する"
+      description: |
+        楽器情報を更新する。
+        リクエストの内容ですべて上書きする。つまり、更新したい項目のみを指定すると他の項目が空(もしくはnull)になる。
+      operationId: "PutInstrument"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "query"
+        description: "楽器ID"
+        required: true
+        type: "string"
+      - name: "body"
+        in: "body"
+        description: "更新内容"
+        required: true
+        schema:
+          $ref: "#/definitions/instrumentUpdate"
+      responses:
+        "200":
+          description: "成功"
+        "400":
+          description: |
+            不正な入力
+            * パスのidが存在しない
+            * ボディのidがDB上にすでに存在する
+            * ボディのcategoryIdがDB上に存在しない
+          schema:
+            $ref: "#/definitions/errorResponse"
     delete:
       tags:
       - "instrument"
@@ -193,66 +257,6 @@ paths:
             $ref: "#/definitions/instrumentList"
         "400":
           description: "不正な入力"
-          schema:
-            $ref: "#/definitions/errorResponse"
-  /v1/music/instrumentation/instrument/{id}:
-    get:
-      tags:
-      - "instrument"
-      summary: "楽器の詳細を取得する"
-      description: "楽器の詳細を取得する"
-      operationId: "GetInstrument"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "id"
-        in: "path"
-        description: "楽器ID"
-        required: true
-        type: "string"
-      responses:
-        "200":
-          description: "成功"
-          schema:
-            type: "object"
-            properties:
-              instrument:
-                $ref: "#/definitions/instrument"
-        "400":
-          description: "不正な入力"
-          schema:
-            $ref: "#/definitions/errorResponse"
-    put:
-      tags:
-      - "instrument"
-      summary: "楽器情報を更新する"
-      description: "楽器情報を更新する。"
-      operationId: "PutInstrument"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "id"
-        in: "path"
-        description: "楽器ID"
-        required: true
-        type: "string"
-      - name: "body"
-        in: "body"
-        description: "更新内容"
-        required: true
-        schema:
-          $ref: "#/definitions/instrumentUpdate"
-      responses:
-        "200":
-          description: "成功"
-        "400":
-          description: |
-            不正な入力
-            * パスのidが存在しない
-            * ボディのidがDB上にすでに存在する
-            * ボディのcategoryIdがDB上に存在しない
           schema:
             $ref: "#/definitions/errorResponse"
   /v1/music/instrumentation/instrument/categories:
@@ -351,12 +355,14 @@ definitions:
   #   description: "編成の分類"
   instrument:
     type: "object"
-    description: "楽器の情報"
+    description: |
+      楽器の情報
+      instrumentがレスポンスで使われるとき、内部データがない情報(DB上でnull)なものについてはキーは存在し、値をnullとする。
     properties:
       id:
         type: "string"
         format: "string"
-        description: "ID。指定ない場合はenUsの値となる。"
+        description: "楽器のID"
         example: "flute"
       jaJp:
         type: "string"
@@ -398,152 +404,56 @@ definitions:
         example: true
   instrumentPost:
     type: "object"
-    description: "楽器の登録情報"
+    description: "登録する楽器の情報"
     required:
-    - "instrument"
+    - "jaJp"
+    - "enUs"
+    - "abbreviation"
+    - "categoryId"
     properties:
-      instrument:
-        type: "object"
-        description: "登録する楽器の情報"
-        required:
-        - "jaJp"
-        - "enUs"
-        - "abbreviation"
-        - "categoryId"
-        properties:
-          id:
-            type: "string"
-            format: "string"
-            description: "ID。指定ない場合はenUsの値となる。"
-            example: "flute"
-          jaJp:
-            type: "string"
-            format: "string"
-            description: "楽器の日本語名"
-            example: "フルート"
-          enUs:
-            type: "string"
-            format: "string"
-            description: "楽器の英語名"
-            example: "flute"
-          itIt:
-            type: "string"
-            format: "string"
-            description: "楽器のイタリア語名。指定ない場合は空となる。"
-            example: "flauto"
-          abbreviation:
-            type: "string"
-            format: "string"
-            description: "楽器の短縮名"
-            example: "Fl."
-          categoryId:
-            type: "string"
-            description: "楽器の分類"
-            enum:
-            - "woodwind"
-            - "brass"
-            - "percussion"
-            - "string"
-            - "keyboard"
-            - "voice"
-            - "other"
-            example: "woodwind"
-          isUsual:
-            type: "boolean"
-            default: true
-            description: "よく使われる楽器かどうか。falseは特殊楽器を指す。"
-            example: true
-  instrumentSearch:
-    type: "object"
-    description: "楽器検索の条件"
-    properties:
+      id:
+        type: "string"
+        format: "string"
+        description: |
+          楽器のID。
+          * 指定可能文字種はアルファベットとアンダースコアのみ。
+          * 長さは1～20。
+          * 指定ない場合はenUsの値となる
+            * 条件にそぐわない文字種は除外する
+            * 長さが超過していた場合は超過分を切り落とす。
+        example: "flute"
       jaJp:
-        type: "object"
-        description: "日本語名"
-        required:
-        - "name"
-        - "match"
-        properties:
-          name:
-            type: "string"
-            format: "string"
-            description: "名前"
-            example: "フルート"
-          match:
-            type: "string"
-            format: "string"
-            description: |
-              一致具合
-              * 部分一致 ⇒ `partial`
-              * 完全一致 ⇒ `exact`
-            example: "exact"
+        type: "string"
+        format: "string"
+        description: "楽器の日本語名"
+        example: "フルート"
       enUs:
-        type: "object"
-        description: "英語名"
-        required:
-        - "name"
-        - "match"
-        properties:
-          name:
-            type: "string"
-            format: "string"
-            description: "名前"
-            example: "flute"
-          match:
-            type: "string"
-            format: "string"
-            description: |
-              一致具合
-              * 部分一致 ⇒ `partial`
-              * 完全一致 ⇒ `exact`
-            example: "exact"
+        type: "string"
+        format: "string"
+        description: "楽器の英語名"
+        example: "flute"
       itIt:
-        type: "object"
-        description: "イタリア語名"
-        required:
-        - "name"
-        - "match"
-        properties:
-          name:
-            type: "string"
-            format: "string"
-            description: "名前"
-            example: "flauto"
-          match:
-            type: "string"
-            format: "string"
-            description: |
-              一致具合
-              * 部分一致 ⇒ `partial`
-              * 完全一致 ⇒ `exact`
-            example: "exact"
-      categoryId:
-        type: "array"
-        description: "楽器分類ID"
-        items:
-          type: "string"
-          format: "string"
-          example: "woodwind"
+        type: "string"
+        format: "string"
+        description: "楽器のイタリア語名。指定ない場合は空となる。"
+        example: "flauto"
       abbreviation:
-        type: "object"
-        description: "短縮名"
-        required:
-        - "name"
-        - "match"
-        properties:
-          name:
-            type: "string"
-            format: "string"
-            description: "名前"
-            example: "Fl"
-          match:
-            type: "string"
-            format: "string"
-            description: |
-              一致具合
-              * 部分一致 ⇒ `partial`
-              * 完全一致 ⇒ `exact`
-            example: "exact"
+        type: "string"
+        format: "string"
+        description: "楽器の短縮名"
+        example: "Fl."
+      categoryId:
+        type: "string"
+        description: "楽器の分類"
+        enum:
+        - "woodwind"
+        - "brass"
+        - "percussion"
+        - "string"
+        - "keyboard"
+        - "voice"
+        - "other"
+        example: "woodwind"
       isUsual:
         type: "boolean"
         default: true
@@ -560,59 +470,184 @@ definitions:
         description: "楽器情報の一覧"
         items:
           $ref: "#/definitions/instrument"
-  instrumentUpdate:
+  instrumentSearch:
     type: "object"
-    description: "楽器の更新情報"
-    required:
-    - "instrument"
+    description: "楽器検索の条件"
     properties:
-      instrument:
+      filter:
         type: "object"
-        description: "更新する楽器の情報"
+        description: "検索条件"
         properties:
-          id:
-            type: "string"
-            format: "string"
-            description: "ID"
-            example: "flute"
           jaJp:
-            type: "string"
-            format: "string"
-            description: "楽器の日本語名"
-            example: "フルート"
+            type: "object"
+            description: "日本語名"
+            required:
+            - "name"
+            - "match"
+            properties:
+              name:
+                type: "string"
+                format: "string"
+                description: "名前"
+                example: "フルート"
+              match:
+                type: "string"
+                format: "string"
+                description: |
+                  一致具合
+                  * 部分一致 ⇒ `partial`
+                  * 完全一致 ⇒ `exact`
+                example: "exact"
           enUs:
-            type: "string"
-            format: "string"
-            description: "楽器の英語名"
-            example: "flute"
+            type: "object"
+            description: "英語名"
+            required:
+            - "name"
+            - "match"
+            properties:
+              name:
+                type: "string"
+                format: "string"
+                description: "名前"
+                example: "flute"
+              match:
+                type: "string"
+                format: "string"
+                description: |
+                  一致具合
+                  * 部分一致 ⇒ `partial`
+                  * 完全一致 ⇒ `exact`
+                example: "exact"
           itIt:
-            type: "string"
-            format: "string"
-            description: "楽器のイタリア語名"
-            example: "flauto"
-          abbreviation:
-            type: "string"
-            format: "string"
-            description: "楽器の短縮名"
-            example: "Fl."
+            type: "object"
+            description: "イタリア語名"
+            required:
+            - "name"
+            - "match"
+            properties:
+              name:
+                type: "string"
+                format: "string"
+                description: "名前"
+                example: "flauto"
+              match:
+                type: "string"
+                format: "string"
+                description: |
+                  一致具合
+                  * 部分一致 ⇒ `partial`
+                  * 完全一致 ⇒ `exact`
+                example: "exact"
           categoryId:
-            type: "string"
-            format: "string"
-            description: "楽器の分類"
-            enum:
-            - "woodwind"
-            - "brass"
-            - "percussion"
-            - "string"
-            - "keyboard"
-            - "voice"
-            - "other"
-            example: "woodwind"
+            type: "array"
+            description: |
+              楽器分類ID
+              複数指定可能
+            items:
+              type: "string"
+              format: "string"
+              example: "woodwind"
+          abbreviation:
+            type: "object"
+            description: "短縮名"
+            required:
+            - "name"
+            - "match"
+            properties:
+              name:
+                type: "string"
+                format: "string"
+                description: "名前"
+                example: "Fl"
+              match:
+                type: "string"
+                format: "string"
+                description: |
+                  一致具合
+                  * 部分一致 ⇒ `partial`
+                  * 完全一致 ⇒ `exact`
+                example: "exact"
           isUsual:
             type: "boolean"
             default: true
             description: "よく使われる楽器かどうか。falseは特殊楽器を指す。"
             example: true
+      sort:
+        type: "object"
+        description: "ソート指定"
+        properties:
+          key:
+            type: "string"
+            format: "string"
+            description: |
+              ソート順を決める楽器情報の要素名
+              選べるのは以下の要素とする
+              - 日本語名
+              - 英語名
+              - イタリア語名
+              - 短縮名
+
+              ※楽器分類IDについては常にソートされることとする
+              ※通常使われる楽器か否かについては2択のためソート対象外とする
+            enum:
+            - "jaJp"
+            - "enUs"
+            - "itIt"
+            - "abbreviation"
+          order:
+            type: "string"
+            format: "string"
+            description: |
+              ソート順
+              * 昇順 ⇒ `asc`
+              * 降順 ⇒ `desc`
+  instrumentUpdate:
+    type: "object"
+    description: "更新する楽器の情報"
+    properties:
+      id:
+        type: "string"
+        format: "string"
+        description: "ID"
+        example: "flute"
+      jaJp:
+        type: "string"
+        format: "string"
+        description: "楽器の日本語名"
+        example: "フルート"
+      enUs:
+        type: "string"
+        format: "string"
+        description: "楽器の英語名"
+        example: "flute"
+      itIt:
+        type: "string"
+        format: "string"
+        description: "楽器のイタリア語名"
+        example: "flauto"
+      abbreviation:
+        type: "string"
+        format: "string"
+        description: "楽器の短縮名"
+        example: "Fl."
+      categoryId:
+        type: "string"
+        format: "string"
+        description: "楽器の分類"
+        enum:
+        - "woodwind"
+        - "brass"
+        - "percussion"
+        - "string"
+        - "keyboard"
+        - "voice"
+        - "other"
+        example: "woodwind"
+      isUsual:
+        type: "boolean"
+        default: true
+        description: "よく使われる楽器かどうか。falseは特殊楽器を指す。"
+        example: true
   instrumentCategory:
     type: "object"
     description: "楽器の分類"
